@@ -6,7 +6,8 @@
 #
 # replacing newuser with the name you want to replace the default pi user.
 # Your Raspberry Pi will then reboot twice, and the pi user should be replaced.
-# The new user has the same password as the original pi user.
+# The new user has the same password as the original pi user. Edited for
+# Raspberry Pi OS Lite
 #
 # Greatly inspired by (well actually most of it is stolen from)
 #   http://unixetc.co.uk/2016/01/07/how-to-rename-the-default-raspberry-pi-user/
@@ -67,11 +68,10 @@ fi
 
 /bin/echo Backing up files...
 cd /etc
-/bin/tar -cvf authfiles.tar passwd group shadow gshadow sudoers lightdm/lightdm.conf systemd/system/autologin@.service sudoers.d/* polkit-1/localauthority.conf.d/60-desktop-policy.conf
+/bin/tar -cvf authfiles.tar passwd group shadow gshadow sudoers systemd/system/autologin@.service sudoers.d/*
 
 /bin/echo Renaming user in files...
-/bin/sed -i.$(date +'%y%m%d_%H%M%S') "s/\bpi\b/$NEWDEFAULT/g" passwd group shadow gshadow sudoers systemd/system/autologin@.service sudoers.d/* polkit-1/localauthority.conf.d/60-desktop-policy.conf
-/bin/sed -i.$(date +'%y%m%d_%H%M%S') "s/user=pi/user=$NEWDEFAULT/" lightdm/lightdm.conf
+/bin/sed -i.$(date +'%y%m%d_%H%M%S') "s/\bpi\b/$NEWDEFAULT/g" passwd group shadow gshadow sudoers systemd/system/autologin@.service sudoers.d/*
 
 /bin/echo Renaming home dir...
 /bin/mv /home/pi /home/$NEWDEFAULT
